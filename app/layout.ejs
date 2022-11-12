@@ -1,61 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><%- title %></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
-    <link rel="stylesheet" href="./assets/style/all.css">
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>
+    <%- title %>
+  </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+  <!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
+  <link rel="stylesheet" href="./assets/style/all.css">
+</head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
+<body>
+  <nav class="navbar navbar-light navbar-expand-lg bg-light">
+    <div class="container">
+      <h1 class="mb-0 d-flex align-items-center"> <a class="navbar-brand" href="index.html">
+          <img src="assets/images/LOGO 2.svg" alt="logo" class="align-center">
+        </a>
+      </h1>
+
+      <button class="navbar-toggler text-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon text-secondary link-secondary"></span>
+      </button>
+      <div class="collapse navbar-collapse text-end" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-current="page" href="#">邀請他人簽署</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="upload.html">簽署新文件</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">登入</a>
+          </li>
+        </ul>
+
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <%- contents %>
+  <%- contents %>
 
-    <footer class="footer">
-      footer
-    </footer>
+    <div class="footer bg-light fixed-bottom">
+      <div class="container py-3 d-lg-flex justify-content-between align-items-center">
+        <ul class="d-flex justify-content-center timeline mb-5 mb-lg-0">
+          <li class="me-4 me-sm-6 text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-primary mb-2 timeline-bar timeline-bar-current">上傳文件</p>
+            <span class="timeline-spot timeline-spot-current"></span>
+          </li>
+          <li class="me-4 me-sm-6 text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-darkgray mb-2 timeline-bar">進行簽屬</p>
+            <span class="timeline-spot"></span>
+          </li>
+          <li class="text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-darkgray mb-2">下載文件</p>
+            <span class="timeline-spot"></span>
+          </li>
+        </ul>
+        <ul class="d-flex justify-content-center pt-4 pt-lg-0 border-2 border-top border-lg-0">
+          <li><a href="index.html" class="btn btn-white link-secondary rounded-pill btn-lg px-4 px-sm-6 me-3">取消</a></li>
+          <li><a href="#" data-next class="disabled btn btn-disabled rounded-pill btn-lg px-2 px-sm-6">開啟文件</a></li>
+        </ul>
+      </div>
+    </div>
 
     <script src="./assets/js/vendors.js"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://unpkg.com/fabric@latest/dist/fabric.js"></script>
+   
     <script src="./assets/js/all.js"></script>
-  </body>
+</body>
 
 </html>

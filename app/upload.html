@@ -1,0 +1,51 @@
+---
+title: 點點簽
+layout: ./app/layout.ejs
+engine: ejs
+current: upload
+---
+
+
+<div class="container p-4">
+    <ul class="d-flex tag-bar mb-0">
+        <li data-target="#upload-new" class="w-50 p-3 tags tags-active  text-center"><a href="#">上傳新文件</a></li>
+        <li data-target="#current-file" class="w-50 p-3 tags text-center"><a href="#">選擇已上傳文件</a></li>
+    </ul>
+    <div id="upload-new" class="tags-block bg-white p-3 p-md-5">
+        <input type="file"  value="選擇檔案" class="select d-none" accept="application/pdf" />
+        <a class="outline d-flex flex-column justify-content-center align-items-center p-5">
+            <p class="mb-4">直接拖曳檔案</p>
+            <img src="assets/images/carbon_document-pdf.png" alt="img" class="mb-4 img-fluid">
+            <span>(限10MB以下PDF檔)</span>
+        </a>
+    </div>
+    <div id="current-file" class="tags-block d-none  bg-white p-3 p-md-5">
+        <div class="no-file d-none">尚未上傳任何文件!</div>
+        <div class="has-file">
+            <form class="d-flex justify-content-between align-items-center border border-2 py-2 px-3 rounded-pill mb-4">
+                <input class="input border-0 w-100 me-2" type="search" placeholder="搜尋文件名稱" aria-label="Search">
+                <a href="#"><img src="assets/images/charm_search.png" alt="search icon" width="23" height="23"></a>
+    
+            </form>
+            <table class="table table-hover text-darkgray fw-normal letter-spacing-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">名稱</th>
+                        <th scope="col">上傳時間</th>
+                        <th scope="col" class="d-none d-md-block">上次開啟</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    <!-- <tr class="bg-light">
+                        <th scope="row"><a href="#">六角學院2022版活動切結書.pdf</a></th>
+                        <td><a href="#">2022/10/31，23:45</a></td>
+                        <td class="d-none d-md-block"><a href="#">--</a></td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+
+
+</div>

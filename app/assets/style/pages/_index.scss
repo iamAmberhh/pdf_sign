@@ -1,0 +1,43 @@
+
+
+.banner {
+  background: $gray-100;
+  padding-top: 56px;
+  height: calc(100vh - 56px);
+  width: 100%;
+  background-image:
+    url(../images/banner_main_1.png),
+    url(../images/banner_shadow.png),
+    url(../images/banner_block_md.png);
+    background-position: 0 bottom, 30% bottom, left 0;
+    background-size:  65%, 30%, 100%;
+  background-repeat: no-repeat;
+  @include media-breakpoint-up(sm){
+    background-size:  55%, 30%, 100%;
+  }
+  @include media-breakpoint-up(md){
+    background-image:
+    url(../images/banner_main_1.png),
+    url(../images/banner_shadow.png),
+    url(../images/banner_block.png);
+    background-position: 0 bottom, 30% bottom, right 0;
+    background-size:  45%, 30%, cover;
+  }
+  @include media-breakpoint-up(lg) {
+    background-image:
+    url(../images/banner_left-deco.png),
+    url(../images/banner_main_1.png),
+    url(../images/banner_shadow.png),
+    url(../images/banner_right-deco.png),
+    url(../images/banner_block.png);
+
+    background-position: 20px 85%, 0 0, 40% 95%, right 50%, right bottom;
+  background-size: 10%, 55%, 30%, 10%, contain;
+  }
+  @include media-breakpoint-up(xl) {
+    background-position: 20px 85%, 0 0, 30% 85%, right 50%, right bottom;
+    background-size: 10%, 45%, 30%, 10%, contain;
+  }
+
+}
+

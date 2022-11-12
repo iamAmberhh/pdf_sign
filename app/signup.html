@@ -1,0 +1,38 @@
+---
+title: 點點簽
+layout: ./app/layout.ejs
+engine: ejs
+current: signup
+---
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-3 aside-bar bg-white p-4">
+            <p class="mb-3 fw-bold">文件名稱</p>
+            <p class="mb-5">六角學院2022版活動切結書.pdf</p>
+            <p class="mb-3 fw-bold">我的簽名</p>
+            <ul>
+                <li class="mb-3">
+                    <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center">
+                        <span class="me-3 text-darkgray">創建簽名</span>
+                        <img src="assets/images/Vector-1.png" alt="icon" width="21" height="21">
+                    </a>
+                </li>
+                <li class="mb-3">
+                    <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center">
+                        <span class="me-3 text-darkgray">上傳圖片</span>
+                        <img src="assets/images/Vector-2.png" alt="icon" width="21" height="21">
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-9 py-6 ">
+           <div class="pdf-render bg-white w-100">
+            <input type="file" accept="application/pdf" placeholder="選擇PDF檔案" class="select" />
+            <canvas id="canvas" style="border: 1px solid #000"> </canvas>
+           </div>
+        </div>
+    </div>
+</div>
+
