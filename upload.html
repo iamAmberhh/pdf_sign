@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>
+    點點簽
+  </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+  <!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
+  <link rel="stylesheet" href="./assets/style/all.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-light navbar-expand-lg bg-light">
+    <div class="container">
+      <h1 class="mb-0 d-flex align-items-center"> <a class="navbar-brand" href="index.html">
+          <img src="assets/images/LOGO 2.svg" alt="logo" class="align-center">
+        </a>
+      </h1>
+
+      <button class="navbar-toggler text-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon text-secondary link-secondary"></span>
+      </button>
+      <div class="collapse navbar-collapse text-end" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-current="page" href="#">邀請他人簽署</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="upload.html">簽署新文件</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">登入</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  
+
+<div class="container p-4">
+    <ul class="d-flex tag-bar mb-0">
+        <li data-target="#upload-new" class="w-50 p-3 tags tags-active  text-center"><a href="#">上傳新文件</a></li>
+        <li data-target="#current-file" class="w-50 p-3 tags text-center"><a href="#">選擇已上傳文件</a></li>
+    </ul>
+    <div id="upload-new" class="tags-block bg-white p-3 p-md-5">
+        <input type="file"  value="選擇檔案" class="select d-none" accept="application/pdf" />
+        <a class="outline d-flex flex-column justify-content-center align-items-center p-5">
+            <p class="mb-4">直接拖曳檔案</p>
+            <img src="assets/images/carbon_document-pdf.png" alt="img" class="mb-4 img-fluid">
+            <span>(限10MB以下PDF檔)</span>
+        </a>
+    </div>
+    <div id="current-file" class="tags-block d-none  bg-white p-3 p-md-5">
+        <div class="no-file d-none">尚未上傳任何文件!</div>
+        <div class="has-file">
+            <form class="d-flex justify-content-between align-items-center border border-2 py-2 px-3 rounded-pill mb-4">
+                <input class="input border-0 w-100 me-2" type="search" placeholder="搜尋文件名稱" aria-label="Search">
+                <a href="#"><img src="assets/images/charm_search.png" alt="search icon" width="23" height="23"></a>
+    
+            </form>
+            <table class="table table-hover text-darkgray fw-normal letter-spacing-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">名稱</th>
+                        <th scope="col">上傳時間</th>
+                        <th scope="col" class="d-none d-md-block">上次開啟</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    <!-- <tr class="bg-light">
+                        <th scope="row"><a href="#">六角學院2022版活動切結書.pdf</a></th>
+                        <td><a href="#">2022/10/31，23:45</a></td>
+                        <td class="d-none d-md-block"><a href="#">--</a></td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+
+
+</div>
+
+    <div class="footer bg-light fixed-bottom">
+      <div class="container py-3 d-lg-flex justify-content-between align-items-center">
+        <ul class="d-flex justify-content-center timeline mb-5 mb-lg-0">
+          <li class="me-4 me-sm-6 text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-primary mb-2 timeline-bar timeline-bar-current">上傳文件</p>
+            <span class="timeline-spot timeline-spot-current"></span>
+          </li>
+          <li class="me-4 me-sm-6 text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-darkgray mb-2 timeline-bar">進行簽屬</p>
+            <span class="timeline-spot"></span>
+          </li>
+          <li class="text-center d-flex flex-column align-items-center position-relative">
+            <p class="text-darkgray mb-2">下載文件</p>
+            <span class="timeline-spot"></span>
+          </li>
+        </ul>
+        <ul class="d-flex justify-content-center pt-4 pt-lg-0 border-2 border-top border-lg-0">
+          <li><a href="index.html" class="btn btn-white link-secondary rounded-pill btn-lg px-4 px-sm-6 me-3">取消</a></li>
+          <li><a href="#" data-next class="disabled btn btn-disabled rounded-pill btn-lg px-2 px-sm-6">開啟文件</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="./assets/js/vendors.js"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://unpkg.com/fabric@latest/dist/fabric.js"></script>
+   
+    <script src="./assets/js/all.js"></script>
+</body>
+
+</html>
