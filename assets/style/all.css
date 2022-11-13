@@ -6413,7 +6413,7 @@ fieldset:disabled .btn {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
+  border-radius: 35px;
   outline: 0;
 }
 
@@ -6449,8 +6449,8 @@ fieldset:disabled .btn {
           justify-content: space-between;
   padding: 1rem 1rem;
   border-bottom: 1px solid #dee2e6;
-  border-top-left-radius: calc(0.3rem - 1px);
-  border-top-right-radius: calc(0.3rem - 1px);
+  border-top-left-radius: 34px;
+  border-top-right-radius: 34px;
 }
 
 .modal-header .btn-close {
@@ -6487,8 +6487,8 @@ fieldset:disabled .btn {
           justify-content: flex-end;
   padding: 0.75rem;
   border-top: 1px solid #dee2e6;
-  border-bottom-right-radius: calc(0.3rem - 1px);
-  border-bottom-left-radius: calc(0.3rem - 1px);
+  border-bottom-right-radius: 34px;
+  border-bottom-left-radius: 34px;
 }
 
 .modal-footer > * {
@@ -12386,12 +12386,6 @@ p {
           box-shadow: 0px 4px 4px #EEEDE8;
 }
 
-.btn:hover {
-  border: 1px solid #F9B471;
-  background-color: #F9B471;
-  color: white;
-}
-
 .btn-disabled {
   background: #EEEDE8;
   color: white;
@@ -12452,8 +12446,13 @@ p {
 
 .btn-secondary:hover {
   border: 1px solid #51A8BC;
-  background-color: #FFFAF4;
+  background-color: #fff;
   color: #51A8BC;
+}
+
+.btn-light:hover {
+  background-color: #F9B471;
+  color: #fff;
 }
 
 .banner {
@@ -12569,8 +12568,8 @@ p {
   color: #A5A39C;
 }
 
-.no-file, .file {
-  height: 50vh;
+.no-file,
+.file {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12591,6 +12590,60 @@ p {
   color: #A5A39C;
 }
 
+.sign-block {
+  border: 2px dashed #A5A39C;
+  border-radius: 35px;
+  color: #A5A39C;
+}
+
+.footer {
+  width: 100%;
+  height: 202px;
+}
+
+@media (min-width: 992px) {
+  .footer {
+    height: 95px;
+  }
+}
+
+.aside-bar {
+  position: relative;
+}
+
+.aside-bar::before {
+  content: "";
+  position: absolute;
+  background-color: white;
+  width: 20px;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+}
+
+.aside-bar::after {
+  content: "";
+  position: absolute;
+  background-color: white;
+  width: 20px;
+  right: -10px;
+  top: 0;
+  bottom: 0;
+}
+
+@media (min-width: 992px) {
+  .aside-bar {
+    height: 80vh;
+  }
+  .aside-bar::before {
+    width: 30px;
+    left: -30px;
+  }
+  .aside-bar::after {
+    display: none;
+  }
+}
+
 .btn-outline {
   border: 1px dashed #A5A39C;
   -webkit-box-shadow: none;
@@ -12599,16 +12652,6 @@ p {
 
 .btn-outline:hover {
   background: #FFFAF4;
-}
-
-.minus {
-  margin-left: -70px;
-  margin-right: -70px;
-}
-
-#pdf {
-  border: 1px solid black;
-  width: 100%;
 }
 
 /*# sourceMappingURL=all.css.map */

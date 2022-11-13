@@ -6,7 +6,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var footer = document.querySelector(".footer");
 
-if (window.location.pathname == "/index.html") {
+if (window.location.pathname == "/pdf_sign/") {
   footer.classList.add("d-none");
 } // 下bar 時間軸
 
@@ -15,6 +15,7 @@ var timeline = document.querySelectorAll(".timeline li");
 var pages = 0;
 
 if (window.location.pathname == "/signup.html") {
+  //'/pdf_sign/upload.html'
   pages = 1;
   timelineCheck();
 }
@@ -97,19 +98,18 @@ function drop(e) {
   handleFiles(files, fileObj);
 }
 
+var uploadSuccess = new bootstrap.Modal(document.querySelector("#uploadSuccess"));
+
 function handleFiles(files, fileObj) {
   if (files[0].name.split(".")[1] != "pdf") {
-    // Swal.fire("您的檔案類型不是PDF檔!");
+    var notFileAlert = new bootstrap.Modal(document.querySelector("#notFileAlert"));
+    notFileAlert.show();
     return;
   }
 
   if (files[0].size > 10485760) {
-    // Swal.fire({
-    //   title: "error!",
-    //   text: "您的檔案太大了!",
-    //   icon: "error",
-    //   confirmButtonText: "重新上傳",
-    // });
+    var fileSizeOver = new bootstrap.Modal(document.querySelector("#fileSizeOver"));
+    fileSizeOver.show();
     return;
   }
 
@@ -120,9 +120,6 @@ function handleFiles(files, fileObj) {
       var result = fileReader.result; // console.log(result)
 
       var typedarray = new Uint8Array(fileReader.result); // console.log(typedarray)
-
-      localStorage.setItem("pdf", "".concat(result));
-      localStorage.setItem("test", "".concat(typedarray));
     });
     var obj = {};
     obj.name = files[0].name;
@@ -132,54 +129,81 @@ function handleFiles(files, fileObj) {
     data.push(obj);
     noUpload.classList.add("d-none");
     fileTable.classList.remove("d-none"); // fileReader.readAsText(files[0]); // 讀取上傳的檔案
-    // Swal.fire({
-    //   title: "success!",
-    //   text: "上傳成功",
-    //   icon: "success",
-    //   confirmButtonText: "繼續上傳",
-    // });
 
     renderUpload();
+    uploadSuccess.show();
   }
-} // const fileUploader = document.querySelector(".select");
-// let result2;
-// fileUploader.addEventListener("change", (e) => {
-//     // 副檔名檢查
-//     if (fileUploader.files[0].name.split(".")[1] != "pdf") {
-//         return;
-//     }
-//     if (fileUploader.files.length > 0) {
-//         let reader = new FileReader();
-//         reader.addEventListener("load", function () {
-//             // result2 為讀檔的結果
-//             result2 = reader.result;
-//             console.log(result2);
-//             // 資料處理
-//         });
-//         reader.readAsText(fileUploader.files[0]);
-//     }
-// });
+}
 
+var fileUploader = document.querySelector(".select");
+
+if (fileUploader) {
+  fileUploader.addEventListener("change", function (e) {
+    // 副檔名檢查
+    if (fileUploader.files[0].name.split(".")[1] != "pdf") {
+      return;
+    }
+
+    if (fileUploader.files.length > 0) {
+      var reader = new FileReader();
+      reader.addEventListener("load", function () {
+        var result2 = reader.result;
+        var typedarray = new Uint8Array(reader.result);
+      });
+      var obj = {};
+      obj.name = fileUploader.files[0].name;
+      obj.year = fileUploader.files[0].lastModifiedDate.getFullYear();
+      obj.month = fileUploader.files[0].lastModifiedDate.getMonth() + 1;
+      obj.date = fileUploader.files[0].lastModifiedDate.getDate();
+      data.push(obj);
+      reader.readAsText(fileUploader.files[0]);
+    }
+
+    noUpload.classList.add("d-none");
+    fileTable.classList.remove("d-none");
+    renderUpload();
+    uploadSuccess.show();
+  });
+}
 
 var fileTable = document.querySelector(".has-file");
 var fileTableBody = document.querySelector(".table-body");
 
 function renderUpload() {
   var str = "";
+  var file = "";
   data.forEach(function (i) {
-    str += "<tr>\n    <th scope=\"row\"><a href=\"#\">".concat(i.name, "</a></th>\n    <td><a href=\"#\">").concat(i.year, "/").concat(i.month, "/").concat(i.date, "</a></td>\n    <td class=\"d-none d-md-block\"><a href=\"#\">--</a></td>\n</tr>");
+    str += "<tr data-upload>\n    <th scope=\"row\"><a href=\"#\">".concat(i.name, "</a></th>\n    <td><a href=\"#\">").concat(i.year, "/").concat(i.month, "/").concat(i.date, "</a></td>\n    <td class=\"d-none d-md-block\"><a href=\"#\">--</a></td>\n</tr>");
+    file += "".concat(i.name);
   });
   fileTableBody.innerHTML = str;
+  fileName.textContent = file;
 }
 
 var nextStepBtn = document.querySelector("[data-next]");
+var fileName = document.querySelector(".file-name");
+var uploadBlock = document.querySelector("#upload");
+var signBlock = document.querySelector("#sign");
 
 if (fileTableBody) {
   fileTableBody.addEventListener("click", function (e) {
+    var allFiles = document.querySelectorAll("[data-upload]");
+    allFiles.forEach(function (i) {
+      i.classList.remove("bg-light");
+    });
     e.target.closest("tr").classList.add("bg-light");
     nextStepBtn.classList.remove("disabled", "btn-disabled");
     nextStepBtn.classList.add("btn-secondary");
-    nextStepBtn.setAttribute("href", "signup.html");
+  });
+}
+
+if (nextStepBtn) {
+  nextStepBtn.addEventListener("click", function () {
+    uploadBlock.classList.add("d-none");
+    signBlock.classList.remove("d-none");
+    nextStepBtn.textContent = "\u5275\u5EFA\u6587\u4EF6";
+    nextStepBtn.classList.add("disabled", "btn-disabled");
+    nextStepBtn.classList.remove("btn-secondary");
   });
 }
 
@@ -248,32 +272,32 @@ function printPDF(_x) {
 }
 
 function _printPDF() {
-  _printPDF = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(pdfData) {
+  _printPDF = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pdfData) {
     var data, pdfDoc, pdfPage, viewport, canvas, context, renderContext, renderTask;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
-            _context2.next = 2;
+            _context.next = 2;
             return readBlob(pdfData);
 
           case 2:
-            pdfData = _context2.sent;
+            pdfData = _context.sent;
             // 將 base64 中的前綴刪去，並進行解碼
             data = atob(pdfData.substring(Base64Prefix.length)); // 利用解碼的檔案，載入 PDF 檔及第一頁
 
-            _context2.next = 6;
+            _context.next = 6;
             return pdfjsLib.getDocument({
               data: data
             }).promise;
 
           case 6:
-            pdfDoc = _context2.sent;
-            _context2.next = 9;
+            pdfDoc = _context.sent;
+            _context.next = 9;
             return pdfDoc.getPage(1);
 
           case 9:
-            pdfPage = _context2.sent;
+            pdfPage = _context.sent;
             // 設定尺寸及產生 canvas
             viewport = pdfPage.getViewport({
               scale: window.devicePixelRatio
@@ -289,16 +313,16 @@ function _printPDF() {
             };
             renderTask = pdfPage.render(renderContext); // 回傳做好的 PDF canvas
 
-            return _context2.abrupt("return", renderTask.promise.then(function () {
+            return _context.abrupt("return", renderTask.promise.then(function () {
               return canvas;
             }));
 
           case 18:
           case "end":
-            return _context2.stop();
+            return _context.stop();
         }
       }
-    }, _callee2);
+    }, _callee);
   }));
   return _printPDF.apply(this, arguments);
 }
@@ -306,19 +330,31 @@ function _printPDF() {
 function pdfToImage(_x2) {
   return _pdfToImage.apply(this, arguments);
 } // 此處 canvas 套用 fabric.js
+// const canvas = new fabric.Canvas("canvas");
+// document.querySelector(".select").addEventListener("change", async function(e){
+//   canvas.requestRenderAll();
+//   const pdfData = await printPDF(e.target.files[0]).promise;
+//   const pdfImage = await pdfToImage(pdfData).promise;
+//   // 透過比例設定 canvas 尺寸
+//   canvas.setWidth(pdfImage.width / window.devicePixelRatio);
+//   canvas.setHeight(pdfImage.height / window.devicePixelRatio);
+//   // 將 PDF 畫面設定為背景
+//   canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
+// });
+// 簽名
 
 
 function _pdfToImage() {
-  _pdfToImage = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(pdfData) {
+  _pdfToImage = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(pdfData) {
     var scale;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             // 設定 PDF 轉為圖片時的比例
             scale = 1 / window.devicePixelRatio; // 回傳圖片
 
-            return _context3.abrupt("return", new fabric.Image(pdfData, {
+            return _context2.abrupt("return", new fabric.Image(pdfData, {
               id: "renderPDF",
               scaleX: scale,
               scaleY: scale
@@ -326,49 +362,121 @@ function _pdfToImage() {
 
           case 2:
           case "end":
-            return _context3.stop();
+            return _context2.stop();
         }
       }
-    }, _callee3);
+    }, _callee2);
   }));
   return _pdfToImage.apply(this, arguments);
 }
 
-var canvas = new fabric.Canvas("canvas");
-document.querySelector(".select").addEventListener("change", /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-    var pdfData, pdfImage;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            canvas.requestRenderAll();
-            _context.next = 3;
-            return printPDF(e.target.files[0]).promise;
+var signCanvas = document.querySelector("#sign-canvas");
 
-          case 3:
-            pdfData = _context.sent;
-            _context.next = 6;
-            return pdfToImage(pdfData).promise;
+if (signCanvas) {
+  // 取得滑鼠or手指在畫布上的位置
+  var getPointPosition = function getPointPosition(e) {
+    var canvaSize = signCanvas.getBoundingClientRect();
 
-          case 6:
-            pdfImage = _context.sent;
-            // 透過比例設定 canvas 尺寸
-            canvas.setWidth(pdfImage.width / window.devicePixelRatio);
-            canvas.setHeight(pdfImage.height / window.devicePixelRatio); // 將 PDF 畫面設定為背景
+    if (e.type == "mousemove") {
+      return {
+        x: e.clientX - canvaSize.left,
+        y: e.clientY - canvaSize.top
+      };
+    } else {
+      return {
+        x: e.touches[0].clientX - canvaSize.left,
+        y: e.touches[0].clientY - canvaSize.top
+      };
+    }
+  }; // 開始繪圖時，將狀態開啟
 
-            canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
 
-          case 10:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
+  var startPosition = function startPosition(e) {
+    e.preventDefault();
+    isPainting = true;
+  }; // 紀錄繪圖歷史
 
-  return function (_x3) {
-    return _ref.apply(this, arguments);
+
+  // 繪圖結束，將狀態關閉，並產生新路徑
+  var finishedPosition = function finishedPosition() {
+    isPainting = false;
+    signCtx.beginPath();
+    push();
+  }; // 繪製過程
+
+
+  var draw = function draw(e) {
+    if (!isPainting) return;
+    var paintPosition = getPointPosition(e);
+    signCtx.lineTo(paintPosition.x, paintPosition.y);
+    signCtx.stroke();
   };
-}());
+
+  var save = function save() {
+    signImg.parentElement.classList.remove("d-none");
+    var newImg = signCanvas.toDataURL("image/png");
+    signImg.src = newImg;
+    localStorage.setItem("img", newImg);
+  };
+
+  var back = function back() {
+    var lastDraw = new Image(); // 確定有上一步我們才回到上一步
+
+    if (step > 0) {
+      step--;
+    } else if (step == 0) {
+      reset();
+    } // 把上一部的base64設定給圖像物件
+
+
+    lastDraw.src = historyStep[step]; // 把圖片載入後用畫布選染出來
+
+    lastDraw.onload = function () {
+      signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+      signCtx.drawImage(lastDraw, 0, 0);
+    };
+  };
+
+  var reset = function reset(e) {
+    signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+    historyStep = [];
+    step = -1;
+  }; // 電腦版
+
+
+  var signCtx = signCanvas.getContext("2d");
+  var signImg = document.querySelector(".sign-img");
+  var saveBtn = document.querySelector(".saveBtn");
+  var backBtn = document.querySelector(".backBtn");
+  var clearBtn = document.querySelector(".clearBtn"); // 設定線條相關數值
+
+  signCtx.lineWidth = 4;
+  signCtx.lineCap = "round";
+  var isPainting = false;
+  var step = -1;
+  var historyStep = [];
+
+  var push = function push() {
+    step++;
+
+    if (step <= historyStep.length - 1) {
+      historyStep.length = step;
+    }
+
+    historyStep.push(signCanvas.toDataURL());
+  };
+
+  signCanvas.addEventListener("mousedown", startPosition);
+  signCanvas.addEventListener("mouseup", finishedPosition); // signCanvas.addEventListener("mouseleave", finishedPosition);
+
+  signCanvas.addEventListener("mousemove", draw); // 手機版
+
+  signCanvas.addEventListener("touchstart", startPosition);
+  signCanvas.addEventListener("touchend", finishedPosition);
+  signCanvas.addEventListener("touchcancel", finishedPosition);
+  signCanvas.addEventListener("touchmove", draw);
+  clearBtn.addEventListener("click", reset);
+  backBtn.addEventListener("click", back);
+  saveBtn.addEventListener("click", save);
+}
 //# sourceMappingURL=all.js.map
