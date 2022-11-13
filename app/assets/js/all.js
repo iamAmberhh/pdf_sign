@@ -1,5 +1,5 @@
 const footer = document.querySelector(".footer");
-if (window.location.pathname == "/index.html") {
+if (window.location.pathname == "/pdf_sign/") {
   footer.classList.add("d-none");
 }
 
@@ -7,6 +7,7 @@ if (window.location.pathname == "/index.html") {
 const timeline = document.querySelectorAll(".timeline li");
 let pages = 0;
 if (window.location.pathname == "/signup.html") {
+  //'/pdf_sign/upload.html'
   pages = 1;
   timelineCheck();
 }
@@ -78,28 +79,32 @@ function drop(e) {
   let fileObj = files[0];
   // console.log(files)
   // console.log(files[0])
-  handleFiles(files,fileObj);
+  handleFiles(files, fileObj);
 }
 
+let uploadSuccess = new bootstrap.Modal(
+  document.querySelector("#uploadSuccess")
+);
 
-function handleFiles(files,fileObj) {
+
+function handleFiles(files, fileObj) {
   if (files[0].name.split(".")[1] != "pdf") {
-    // Swal.fire("您的檔案類型不是PDF檔!");
+    let notFileAlert = new bootstrap.Modal(
+      document.querySelector("#notFileAlert")
+    );
+    notFileAlert.show();
     return;
   }
   if (files[0].size > 10485760) {
-    // Swal.fire({
-    //   title: "error!",
-    //   text: "您的檔案太大了!",
-    //   icon: "error",
-    //   confirmButtonText: "重新上傳",
-    // });
+    let fileSizeOver = new bootstrap.Modal(
+      document.querySelector("#fileSizeOver")
+    );
+    fileSizeOver.show();
     return;
   }
+  
   if (files.length > 0) {
-
     let fileReader = new FileReader();
-
     fileReader.readAsArrayBuffer(fileObj);
 
     fileReader.addEventListener("load", function () {
@@ -107,10 +112,8 @@ function handleFiles(files,fileObj) {
       // console.log(result)
       const typedarray = new Uint8Array(fileReader.result);
       // console.log(typedarray)
-      localStorage.setItem("pdf", `${result}`);
-      localStorage.setItem("test", `${typedarray}`);
     });
-
+    
     let obj = {};
     obj.name = files[0].name;
     obj.year = files[0].lastModifiedDate.getFullYear();
@@ -123,56 +126,82 @@ function handleFiles(files,fileObj) {
 
     // fileReader.readAsText(files[0]); // 讀取上傳的檔案
 
-    // Swal.fire({
-    //   title: "success!",
-    //   text: "上傳成功",
-    //   icon: "success",
-    //   confirmButtonText: "繼續上傳",
-    // });
     renderUpload();
+    uploadSuccess.show();
   }
 }
-// const fileUploader = document.querySelector(".select");
-// let result2;
-// fileUploader.addEventListener("change", (e) => {
-//     // 副檔名檢查
-//     if (fileUploader.files[0].name.split(".")[1] != "pdf") {
-//         return;
-//     }
-//     if (fileUploader.files.length > 0) {
-//         let reader = new FileReader();
-//         reader.addEventListener("load", function () {
-//             // result2 為讀檔的結果
-//             result2 = reader.result;
-//             console.log(result2);
-//             // 資料處理
+const fileUploader = document.querySelector(".select");
 
-//         });
-//         reader.readAsText(fileUploader.files[0]);
-//     }
-// });
+if (fileUploader) {
+  fileUploader.addEventListener("change", (e) => {
+    // 副檔名檢查
+    if (fileUploader.files[0].name.split(".")[1] != "pdf") {
+      return;
+    }
+    if (fileUploader.files.length > 0) {
+      let reader = new FileReader();
+      reader.addEventListener("load", function () {
+        let result2 = reader.result;
+        const typedarray = new Uint8Array(reader.result);
+      });
+
+      let obj = {};
+      obj.name = fileUploader.files[0].name;
+      obj.year = fileUploader.files[0].lastModifiedDate.getFullYear();
+      obj.month = fileUploader.files[0].lastModifiedDate.getMonth() + 1;
+      obj.date = fileUploader.files[0].lastModifiedDate.getDate();
+      data.push(obj);
+
+      reader.readAsText(fileUploader.files[0]);
+    }
+    noUpload.classList.add("d-none");
+    fileTable.classList.remove("d-none");
+    renderUpload();
+    uploadSuccess.show();
+  });
+}
 
 const fileTable = document.querySelector(".has-file");
 const fileTableBody = document.querySelector(".table-body");
 function renderUpload() {
   let str = "";
+  let file = "";
   data.forEach((i) => {
-    str += `<tr>
+    str += `<tr data-upload>
     <th scope="row"><a href="#">${i.name}</a></th>
     <td><a href="#">${i.year}/${i.month}/${i.date}</a></td>
     <td class="d-none d-md-block"><a href="#">--</a></td>
 </tr>`;
+file+=`${i.name}`;
   });
   fileTableBody.innerHTML = str;
+  fileName.textContent = file;
 }
 
 const nextStepBtn = document.querySelector("[data-next]");
+const fileName = document.querySelector(".file-name");
+
+const uploadBlock = document.querySelector("#upload");
+const signBlock = document.querySelector("#sign");
+
 if (fileTableBody) {
   fileTableBody.addEventListener("click", function (e) {
+    let allFiles = document.querySelectorAll("[data-upload]");
+    allFiles.forEach((i) => {
+      i.classList.remove("bg-light");
+    });
     e.target.closest("tr").classList.add("bg-light");
     nextStepBtn.classList.remove("disabled", "btn-disabled");
     nextStepBtn.classList.add("btn-secondary");
-    nextStepBtn.setAttribute("href", "signup.html");
+  });
+}
+if (nextStepBtn) {
+  nextStepBtn.addEventListener("click", function () {
+    uploadBlock.classList.add("d-none");
+    signBlock.classList.remove("d-none");
+    nextStepBtn.textContent = `創建文件`;
+    nextStepBtn.classList.add("disabled", "btn-disabled");
+    nextStepBtn.classList.remove("btn-secondary");
   });
 }
 
@@ -183,10 +212,6 @@ if (noUpload) {
     fileTable.classList.add("d-none");
   }
 }
-
-
-
-
 
 // PDF渲染成畫布
 
@@ -230,7 +255,8 @@ if (noUpload) {
 
 const Base64Prefix = "data:application/pdf;base64,";
 const add = document.querySelector(".add");
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
 
 // 使用原生 FileReader 轉檔
 function readBlob(blob) {
@@ -243,7 +269,6 @@ function readBlob(blob) {
 }
 
 async function printPDF(pdfData) {
-
   // 將檔案處理成 base64
   pdfData = await readBlob(pdfData);
 
@@ -273,7 +298,6 @@ async function printPDF(pdfData) {
 }
 
 async function pdfToImage(pdfData) {
-
   // 設定 PDF 轉為圖片時的比例
   const scale = 1 / window.devicePixelRatio;
 
@@ -286,17 +310,127 @@ async function pdfToImage(pdfData) {
 }
 
 // 此處 canvas 套用 fabric.js
-const canvas = new fabric.Canvas("canvas");
+// const canvas = new fabric.Canvas("canvas");
 
-document.querySelector(".select").addEventListener("change", async function(e){
-  canvas.requestRenderAll();
-  const pdfData = await printPDF(e.target.files[0]).promise;
-  const pdfImage = await pdfToImage(pdfData).promise;
+// document.querySelector(".select").addEventListener("change", async function(e){
+//   canvas.requestRenderAll();
+//   const pdfData = await printPDF(e.target.files[0]).promise;
+//   const pdfImage = await pdfToImage(pdfData).promise;
 
-  // 透過比例設定 canvas 尺寸
-  canvas.setWidth(pdfImage.width / window.devicePixelRatio);
-  canvas.setHeight(pdfImage.height / window.devicePixelRatio);
+//   // 透過比例設定 canvas 尺寸
+//   canvas.setWidth(pdfImage.width / window.devicePixelRatio);
+//   canvas.setHeight(pdfImage.height / window.devicePixelRatio);
 
-  // 將 PDF 畫面設定為背景
-  canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
-});
+//   // 將 PDF 畫面設定為背景
+//   canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
+// });
+
+// 簽名
+const signCanvas = document.querySelector("#sign-canvas");
+if (signCanvas) {
+  const signCtx = signCanvas.getContext("2d");
+  const signImg = document.querySelector(".sign-img");
+  const saveBtn = document.querySelector(".saveBtn");
+  const backBtn = document.querySelector(".backBtn");
+  const clearBtn = document.querySelector(".clearBtn");
+
+  // 設定線條相關數值
+  signCtx.lineWidth = 4;
+  signCtx.lineCap = "round";
+
+  let isPainting = false;
+
+  // 取得滑鼠or手指在畫布上的位置
+  function getPointPosition(e) {
+    const canvaSize = signCanvas.getBoundingClientRect();
+    if (e.type == "mousemove") {
+      return {
+        x: e.clientX - canvaSize.left,
+        y: e.clientY - canvaSize.top,
+      };
+    } else {
+      return {
+        x: e.touches[0].clientX - canvaSize.left,
+        y: e.touches[0].clientY - canvaSize.top,
+      };
+    }
+  }
+
+  // 開始繪圖時，將狀態開啟
+  function startPosition(e) {
+    e.preventDefault();
+    isPainting = true;
+  }
+
+  // 紀錄繪圖歷史
+  let step = -1;
+  let historyStep = [];
+  let push = function () {
+    step++;
+    if (step <= historyStep.length - 1) {
+      historyStep.length = step;
+    }
+    historyStep.push(signCanvas.toDataURL());
+  };
+
+  // 繪圖結束，將狀態關閉，並產生新路徑
+  function finishedPosition() {
+    isPainting = false;
+    signCtx.beginPath();
+    push();
+  }
+
+  // 繪製過程
+  function draw(e) {
+    if (!isPainting) return;
+    const paintPosition = getPointPosition(e);
+    signCtx.lineTo(paintPosition.x, paintPosition.y);
+    signCtx.stroke();
+  }
+
+  function save() {
+    signImg.parentElement.classList.remove("d-none");
+    const newImg = signCanvas.toDataURL("image/png");
+    signImg.src = newImg;
+    localStorage.setItem("img", newImg);
+  }
+
+  function back() {
+    let lastDraw = new Image();
+    // 確定有上一步我們才回到上一步
+    if (step > 0) {
+      step--;
+    } else if (step == 0) {
+      reset();
+    }
+    // 把上一部的base64設定給圖像物件
+    lastDraw.src = historyStep[step];
+    // 把圖片載入後用畫布選染出來
+    lastDraw.onload = function () {
+      signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+      signCtx.drawImage(lastDraw, 0, 0);
+    };
+  }
+
+  function reset(e) {
+    signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+    historyStep = [];
+    step = -1;
+  }
+
+  // 電腦版
+  signCanvas.addEventListener("mousedown", startPosition);
+  signCanvas.addEventListener("mouseup", finishedPosition);
+  // signCanvas.addEventListener("mouseleave", finishedPosition);
+  signCanvas.addEventListener("mousemove", draw);
+
+  // 手機版
+  signCanvas.addEventListener("touchstart", startPosition);
+  signCanvas.addEventListener("touchend", finishedPosition);
+  signCanvas.addEventListener("touchcancel", finishedPosition);
+  signCanvas.addEventListener("touchmove", draw);
+
+  clearBtn.addEventListener("click", reset);
+  backBtn.addEventListener("click", back);
+  saveBtn.addEventListener("click", save);
+}

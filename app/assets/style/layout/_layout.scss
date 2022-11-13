@@ -1,60 +1,70 @@
- 
-.timeline-spot{
-    display: block;
-    position: absolute;
-    z-index: 5;
-    top: 30px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: $light;
-    border: 3px solid white;
-    box-shadow: 0px 4px 4px #EEEDE8;
-    &-current{
-        background-color: $primary;
-    }
-    &-done{
-        background-color: $secondary; 
-    }
-}
+ .timeline-spot {
+     display: block;
+     position: absolute;
+     z-index: 5;
+     top: 30px;
+     width: 16px;
+     height: 16px;
+     border-radius: 50%;
+     background-color: $light;
+     border: 3px solid white;
+     box-shadow: 0px 4px 4px #EEEDE8;
 
-.timeline-bar{
-    &::after{
-        content:"";
-        position: absolute;
-        width: 100px;
+     &-current {
+         background-color: $primary;
+     }
 
-        height: 6px;
-        border:2px solid $white;
-        bottom: -30%;
-        left: 50%;
-        z-index:0;
-        box-shadow: 0px 4px 4px #EEEDE8;
-    }
-    @include media-breakpoint-up(sm){
-        &::after{
-            width: 150px;
-        }
-      }
-    
-    &-current{
-        &::after{
-            background: $primary;
-        }
-    }
-    &-done{
-        &::after{
-            background: $secondary;
-        }
-    }
-}
+     &-done {
+         background-color: $secondary;
+     }
+ }
+
+ .timeline-bar {
+     &::after {
+         content: "";
+         position: absolute;
+         width: 100px;
+
+         height: 6px;
+         border: 2px solid $white;
+         bottom: -30%;
+         left: 50%;
+         z-index: 0;
+         box-shadow: 0px 4px 4px #EEEDE8;
+     }
+
+     @include media-breakpoint-up(sm) {
+         &::after {
+             width: 150px;
+         }
+     }
+
+     &-current {
+         &::after {
+             background: $primary;
+         }
+     }
+
+     &-done {
+         &::after {
+             background: $secondary;
+         }
+     }
+ }
 
 
-.btn-secondary{
-    color: white;
+ .btn-secondary {
+     color: white;
+     &:hover {
+         border: 1px solid $secondary;
+         background-color: $white;
+         color: $secondary;
+     }
+ }
+
+ .btn-light {
     &:hover{
-        border: 1px solid $secondary;
-        background-color: $light;
-        color: $secondary;
-      }
-}
+        background-color: $primary;
+        color:$white;
+    }
+ }

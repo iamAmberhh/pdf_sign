@@ -47,29 +47,48 @@
 }
 
 .input {
-    &:focus{
-        outline-style: none ;
+    &:focus {
+        outline-style: none;
     }
-    &::placeholder{
-        color:$darkgray;
+
+    &::placeholder {
+        color: $darkgray;
     }
 }
 
-.no-file,.file {
-    height: 50vh;
+.no-file,
+.file {
+    // height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.table{
-    &:hover{
-        a{
-            color:$secondary;
+.table {
+    &:hover {
+        a {
+            color: $secondary;
         }
     }
-    a{
+
+    a {
         display: block;
-        color:$darkgray;
+        color: $darkgray;
+    }
+}
+
+.sign-block {
+    // display: block;
+    border: 2px dashed $darkgray;
+    border-radius: 35px;
+    color: $darkgray;
+}
+
+
+.footer {
+    width: 100%;
+    height: 202px;
+    @include media-breakpoint-up(lg) {
+        height: 95px;
     }
 }

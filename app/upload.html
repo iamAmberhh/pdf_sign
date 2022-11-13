@@ -5,19 +5,22 @@ engine: ejs
 current: upload
 ---
 
-
-<div class="container p-4">
+<!-- 上傳 -->
+<div id="upload" class="container p-4">
     <ul class="d-flex tag-bar mb-0">
         <li data-target="#upload-new" class="w-50 p-3 tags tags-active  text-center"><a href="#">上傳新文件</a></li>
         <li data-target="#current-file" class="w-50 p-3 tags text-center"><a href="#">選擇已上傳文件</a></li>
     </ul>
     <div id="upload-new" class="tags-block bg-white p-3 p-md-5">
-        <input type="file"  value="選擇檔案" class="select d-none" accept="application/pdf" />
-        <a class="outline d-flex flex-column justify-content-center align-items-center p-5">
-            <p class="mb-4">直接拖曳檔案</p>
+        <input type="file"  value="選擇檔案" id="select" class="select d-none" accept="application/pdf" />
+        <a class="outline d-flex flex-column justify-content-center align-items-center text-center p-5">
+            <label for="select">
+            <p class="mb-4">點擊此處上傳 或 直接拖曳檔案</p>
             <img src="assets/images/carbon_document-pdf.png" alt="img" class="mb-4 img-fluid">
-            <span>(限10MB以下PDF檔)</span>
+            <span class="d-block">(限10MB以下PDF檔)</span>
+        </label>
         </a>
+
     </div>
     <div id="current-file" class="tags-block d-none  bg-white p-3 p-md-5">
         <div class="no-file d-none">尚未上傳任何文件!</div>
@@ -36,11 +39,6 @@ current: upload
                     </tr>
                 </thead>
                 <tbody class="table-body">
-                    <!-- <tr class="bg-light">
-                        <th scope="row"><a href="#">六角學院2022版活動切結書.pdf</a></th>
-                        <td><a href="#">2022/10/31，23:45</a></td>
-                        <td class="d-none d-md-block"><a href="#">--</a></td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -49,3 +47,109 @@ current: upload
 
 
 </div>
+
+<!-- 簽名 -->
+<div id="sign" class="mx-auto d-none px-4">
+    <div class="row">
+        <div class="order-2 order-lg-1 col-lg-3 aside-bar bg-white ps-lg-2 p-4">
+            <p class="mb-3 fw-bold">文件名稱</p>
+            <p class="mb-5 file-name">六角學院2022版活動切結書.pdf</p>
+            <p class="mb-3 fw-bold">我的簽名</p>
+            <div class="mb-3">
+                <a href="#" class="btn-outline d-flex justify-content-center align-items-center d-none">
+                    <img class="sign-img" width="250" height="100" >
+                </a>
+            </div>
+            <ul class="row row-cols-2 row-cols-lg-1 g-3">
+                <li class="col">
+                    <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#mysign">
+                        <span class="me-3 text-darkgray">創建簽名</span>
+                        <img src="assets/images/Vector-1.png" alt="icon" width="21" height="21">
+                    </a>
+                </li>
+                <!-- <li class="col">
+                    <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center">
+                        <span class="me-3 text-darkgray">上傳圖片</span>
+                        <img src="assets/images/Vector-2.png" alt="icon" width="21" height="21">
+                    </a>
+                </li> -->
+            </ul>
+        </div>
+        <div class="order-1 order-lg-2 col-lg-9 py-6 ">
+           <div class="pdf-render bg-white w-100">
+            <canvas id="canvas" style="border: 1px solid #000"> </canvas>
+           </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+  <!-- 簽名Modal -->
+  <div class="modal fade" id="mysign" tabindex="-1" aria-labelledby="mysignLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header m-4">
+          <p class="modal-title fs-2" id="mysignLabel">在框格內簽下大名!</p>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 d-flex justify-content-center">
+            <canvas id="sign-canvas" width="550" height="350" class="sign-block">
+                your browser can not support canvas
+              </canvas>
+        </div>
+        <div class="modal-footer d-flex justify-content-between align-items-center m-4">
+            <a href="#" class="clearBtn link-secondary fs-2">清除</a>
+            <ul class="d-flex">
+                <li><a href="#" class="btn btn-secondary rounded-pill px-5 py-3 backBtn me-3">前一步</a></li>
+                <li><a href="#" class="btn btn-secondary rounded-pill px-5 py-3 saveBtn" data-bs-dismiss="modal">簽好了</a></li>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- 上傳成功 -->
+  <div class="modal fade" id="uploadSuccess" tabindex="-1" aria-labelledby="uploadSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-6">
+            <p class="fs-2">上傳成功!</p>
+            <p class="fs-2">可以繼續上傳 或 選擇已上傳的文件</p>
+        </div>
+        <div class="modal-footer d-flex justify-content-end">
+            <a href="#" class="btn btn-secondary rounded-pill px-5 py-3" data-bs-dismiss="modal">我知道了</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 檔案過大 -->
+  <div class="modal fade" id="fileSizeOver" tabindex="-1" aria-labelledby="fileSizeOverLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-6">
+            <p class="fs-2">您的檔案太大了!</p>
+        </div>
+        <div class="modal-footer d-flex justify-content-end">
+            <a href="#" class="btn btn-secondary rounded-pill px-5 py-3" data-bs-dismiss="modal">我知道了</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 檔案類型錯誤 -->
+  <div class="modal fade" id="notFileAlert" tabindex="-1" aria-labelledby="notFileAlertLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-6">
+            <p class="fs-2">您的檔案類型不是PDF檔!!</p>
+        </div>
+        <div class="modal-footer d-flex justify-content-end">
+            <a href="#" class="btn btn-secondary rounded-pill px-5 py-3" data-bs-dismiss="modal">我知道了</a>
+        </div>
+      </div>
+    </div>
+  </div>
