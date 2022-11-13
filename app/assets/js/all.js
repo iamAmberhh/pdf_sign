@@ -1,18 +1,12 @@
 const footer = document.querySelector(".footer");
-if (window.location.pathname == "/pdf_sign/") {
+if (window.location.pathname == "/pdf_sign/" || window.location.pathname == '/pdf_sign/index.html') {
   footer.classList.add("d-none");
 }
 
 // 下bar 時間軸
 const timeline = document.querySelectorAll(".timeline li");
 let pages = 0;
-if (window.location.pathname == "/signup.html") {
-  //'/pdf_sign/upload.html'
-  pages = 1;
-  timelineCheck();
-}
-if (window.location.pathname == "/download.html") {
-  pages = 2;
+if (window.location.pathname == '/pdf_sign/upload.html') {
   timelineCheck();
 }
 
@@ -82,11 +76,6 @@ function drop(e) {
   handleFiles(files, fileObj);
 }
 
-let uploadSuccess = new bootstrap.Modal(
-  document.querySelector("#uploadSuccess")
-);
-
-
 function handleFiles(files, fileObj) {
   if (files[0].name.split(".")[1] != "pdf") {
     let notFileAlert = new bootstrap.Modal(
@@ -130,14 +119,32 @@ function handleFiles(files, fileObj) {
     uploadSuccess.show();
   }
 }
+
+// 點擊上傳
+let uploadSuccess = new bootstrap.Modal(
+  document.querySelector("#uploadSuccess")
+);
 const fileUploader = document.querySelector(".select");
 
 if (fileUploader) {
   fileUploader.addEventListener("change", (e) => {
     // 副檔名檢查
     if (fileUploader.files[0].name.split(".")[1] != "pdf") {
+      let notFileAlert = new bootstrap.Modal(
+        document.querySelector("#notFileAlert")
+      );
+      notFileAlert.show();
       return;
     }
+    if (fileUploader.files[0].size > 10485760) {
+      let fileSizeOver = new bootstrap.Modal(
+        document.querySelector("#fileSizeOver")
+      );
+      fileSizeOver.show();
+      return;
+    }
+
+
     if (fileUploader.files.length > 0) {
       let reader = new FileReader();
       reader.addEventListener("load", function () {
@@ -165,17 +172,15 @@ const fileTable = document.querySelector(".has-file");
 const fileTableBody = document.querySelector(".table-body");
 function renderUpload() {
   let str = "";
-  let file = "";
+
   data.forEach((i) => {
     str += `<tr data-upload>
-    <th scope="row"><a href="#">${i.name}</a></th>
+    <th scope="row"><a href="#" class="ellipsis">${i.name}</a></th>
     <td><a href="#">${i.year}/${i.month}/${i.date}</a></td>
     <td class="d-none d-md-block"><a href="#">--</a></td>
 </tr>`;
-file+=`${i.name}`;
   });
   fileTableBody.innerHTML = str;
-  fileName.textContent = file;
 }
 
 const nextStepBtn = document.querySelector("[data-next]");
@@ -191,9 +196,14 @@ if (fileTableBody) {
       i.classList.remove("bg-light");
     });
     e.target.closest("tr").classList.add("bg-light");
+    console.log(e.target.closest('tr').firstChild.nextSibling.firstChild.textContent
+    );
+    let file = e.target.closest('tr').firstChild.nextSibling.firstChild.textContent;
     nextStepBtn.classList.remove("disabled", "btn-disabled");
     nextStepBtn.classList.add("btn-secondary");
+  fileName.textContent = file;
   });
+  
 }
 if (nextStepBtn) {
   nextStepBtn.addEventListener("click", function () {
@@ -202,6 +212,8 @@ if (nextStepBtn) {
     nextStepBtn.textContent = `創建文件`;
     nextStepBtn.classList.add("disabled", "btn-disabled");
     nextStepBtn.classList.remove("btn-secondary");
+    pages++
+    timelineCheck()
   });
 }
 
@@ -213,117 +225,6 @@ if (noUpload) {
   }
 }
 
-// PDF渲染成畫布
-
-// const selectFile = document.querySelector(".select");
-// pdfjsLib.GlobalWorkerOptions.workerSrc = "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
-// const canvas = document.querySelector("#canvas");
-// const ctx = canvas.getContext("2d");
-
-// function renderPDF(data) {
-//   //  非同步 取得PDF檔案 進到then
-//   pdfjsLib.getDocument(data).promise.then((doc) => {
-//     //  選擇檔案的第一頁，成功再進到then
-//     doc.getPage(1).then((page) => {
-//       //  取得檔案的大小，並設為視口大小
-//       const viewport = page.getViewport({ scale: 1 });
-//       //   讓畫布和視口(檔案)大小一樣
-//       canvas.width = viewport.width;
-//       canvas.height = viewport.height;
-//       //   渲染頁面
-//       page.render({
-//         canvasContext: ctx,
-//         viewport: viewport
-//       });
-//     });
-//   });
-// }
-
-// if(selectFile){
-//   selectFile.addEventListener("change", (e) => {
-//     if (e.target.files[0] === undefined) return;
-//     const file = e.target.files[0];
-//     const fileReader = new FileReader();
-//     fileReader.readAsArrayBuffer(file);
-//     fileReader.addEventListener("load", () => {
-//       // 獲取readAsArrayBuffer產生的結果，並用來渲染PDF
-//       const typedarray = new Uint8Array(fileReader.result);
-//       renderPDF(typedarray);
-//     });
-//   });
-// }
-
-const Base64Prefix = "data:application/pdf;base64,";
-const add = document.querySelector(".add");
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
-
-// 使用原生 FileReader 轉檔
-function readBlob(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => resolve(reader.result));
-    reader.addEventListener("error", reject);
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function printPDF(pdfData) {
-  // 將檔案處理成 base64
-  pdfData = await readBlob(pdfData);
-
-  // 將 base64 中的前綴刪去，並進行解碼
-  const data = atob(pdfData.substring(Base64Prefix.length));
-
-  // 利用解碼的檔案，載入 PDF 檔及第一頁
-  const pdfDoc = await pdfjsLib.getDocument({ data }).promise;
-  const pdfPage = await pdfDoc.getPage(1);
-
-  // 設定尺寸及產生 canvas
-  const viewport = pdfPage.getViewport({ scale: window.devicePixelRatio });
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  // 設定 PDF 所要顯示的寬高及渲染
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
-  const renderContext = {
-    canvasContext: context,
-    viewport,
-  };
-  const renderTask = pdfPage.render(renderContext);
-
-  // 回傳做好的 PDF canvas
-  return renderTask.promise.then(() => canvas);
-}
-
-async function pdfToImage(pdfData) {
-  // 設定 PDF 轉為圖片時的比例
-  const scale = 1 / window.devicePixelRatio;
-
-  // 回傳圖片
-  return new fabric.Image(pdfData, {
-    id: "renderPDF",
-    scaleX: scale,
-    scaleY: scale,
-  });
-}
-
-// 此處 canvas 套用 fabric.js
-// const canvas = new fabric.Canvas("canvas");
-
-// document.querySelector(".select").addEventListener("change", async function(e){
-//   canvas.requestRenderAll();
-//   const pdfData = await printPDF(e.target.files[0]).promise;
-//   const pdfImage = await pdfToImage(pdfData).promise;
-
-//   // 透過比例設定 canvas 尺寸
-//   canvas.setWidth(pdfImage.width / window.devicePixelRatio);
-//   canvas.setHeight(pdfImage.height / window.devicePixelRatio);
-
-//   // 將 PDF 畫面設定為背景
-//   canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
-// });
 
 // 簽名
 const signCanvas = document.querySelector("#sign-canvas");
@@ -434,3 +335,72 @@ if (signCanvas) {
   backBtn.addEventListener("click", back);
   saveBtn.addEventListener("click", save);
 }
+
+
+
+
+// PDF渲染成畫布
+
+const Base64Prefix = "data:application/pdf;base64,";
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
+
+// 使用原生 FileReader 轉檔
+function readBlob(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(reader.result));
+    reader.addEventListener("error", reject);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function printPDF(pdfData) {
+  // 將檔案處理成 base64
+  pdfData = await readBlob(pdfData);
+
+  // 將 base64 中的前綴刪去，並進行解碼
+  const data = atob(pdfData.substring(Base64Prefix.length));
+
+  // 利用解碼的檔案，載入 PDF 檔及第一頁
+  const pdfDoc = await pdfjsLib.getDocument({ data }).promise;
+  const pdfPage = await pdfDoc.getPage(1);
+
+  // 設定尺寸及產生 canvas
+  const viewport = pdfPage.getViewport({
+  scale: window.devicePixelRatio
+  });
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  // 設定 PDF 所要顯示的寬高及渲染
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+  const renderContext = {
+    canvasContext: context,
+    viewport
+  };
+  const renderTask = pdfPage.render(renderContext);
+  return renderTask.promise.then(() => canvas);
+}
+
+async function pdfToImage(pdfData) {
+  const scale = 1 / window.devicePixelRatio;
+  return new fabric.Image(pdfData, {
+    scaleX: scale,
+    scaleY: scale,
+  });
+}
+
+// 此處 canvas 套用 fabric.js
+const canvas = new fabric.Canvas("canvas");
+
+document.querySelector(".testBtn").addEventListener("change", async (e) => {
+  canvas.requestRenderAll();
+  const pdfData = await printPDF(e.target.files[0]);
+  const pdfImage = await pdfToImage(pdfData);
+
+  canvas.setWidth(pdfImage.width / window.devicePixelRatio);
+  canvas.setHeight(pdfImage.height / window.devicePixelRatio);
+  canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
+});
