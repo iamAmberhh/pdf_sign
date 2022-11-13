@@ -45,7 +45,7 @@
 
   
 <!-- 上傳 -->
-<div id="upload" class="container p-4">
+<div id="upload" class="container d-none p-4">
     <ul class="d-flex tag-bar mb-0">
         <li data-target="#upload-new" class="w-50 p-3 tags tags-active  text-center"><a href="#">上傳新文件</a></li>
         <li data-target="#current-file" class="w-50 p-3 tags text-center"><a href="#">選擇已上傳文件</a></li>
@@ -88,11 +88,11 @@
 </div>
 
 <!-- 簽名 -->
-<div id="sign" class="mx-auto d-none px-4">
+<div id="sign" class="mx-auto  px-4">
     <div class="row">
         <div class="order-2 order-lg-1 col-lg-3 aside-bar bg-white ps-lg-2 p-4">
             <p class="mb-3 fw-bold">文件名稱</p>
-            <p class="mb-5 file-name">六角學院2022版活動切結書.pdf</p>
+            <p class="mb-5 file-name ellipsis"></p>
             <p class="mb-3 fw-bold">我的簽名</p>
             <div class="mb-3">
                 <a href="#" class="btn-outline d-flex justify-content-center align-items-center d-none">
@@ -100,22 +100,24 @@
                 </a>
             </div>
             <ul class="row row-cols-2 row-cols-lg-1 g-3">
+             
                 <li class="col">
                     <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#mysign">
-                        <span class="me-3 text-darkgray">創建簽名</span>
+                        <span class="me-3 text-darkgray">創建<br class="d-sm-none">簽名</span>
                         <img src="assets/images/Vector-1.png" alt="icon" width="21" height="21">
                     </a>
                 </li>
-                <!-- <li class="col">
+                <li class="col">
                     <a href="#" class="btn-outline p-3 d-flex justify-content-center align-items-center">
-                        <span class="me-3 text-darkgray">上傳圖片</span>
+                        <span class="me-3 text-darkgray">上傳<br class="d-sm-none">圖片</span>
                         <img src="assets/images/Vector-2.png" alt="icon" width="21" height="21">
                     </a>
-                </li> -->
+                </li>
             </ul>
         </div>
         <div class="order-1 order-lg-2 col-lg-9 py-6 ">
            <div class="pdf-render bg-white w-100">
+            <input type="file" accept="application/pdf" placeholder="選擇PDF檔案" class="testBtn"/>
             <canvas id="canvas" style="border: 1px solid #000"> </canvas>
            </div>
         </div>
@@ -127,7 +129,7 @@
 
   <!-- 簽名Modal -->
   <div class="modal fade" id="mysign" tabindex="-1" aria-labelledby="mysignLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header m-4">
           <p class="modal-title fs-2" id="mysignLabel">在框格內簽下大名!</p>
@@ -141,8 +143,8 @@
         <div class="modal-footer d-flex justify-content-between align-items-center m-4">
             <a href="#" class="clearBtn link-secondary fs-2">清除</a>
             <ul class="d-flex">
-                <li><a href="#" class="btn btn-secondary rounded-pill px-5 py-3 backBtn me-3">前一步</a></li>
-                <li><a href="#" class="btn btn-secondary rounded-pill px-5 py-3 saveBtn" data-bs-dismiss="modal">簽好了</a></li>
+                <li><a href="#" class="btn btn-secondary rounded-pill px-3 px-md-5 py-3 backBtn me-3">前一步</a></li>
+                <li><a href="#" class="btn btn-secondary rounded-pill px-3 px-md-5 py-3 saveBtn" data-bs-dismiss="modal">簽好了</a></li>
             </ul>
         </div>
       </div>

@@ -12590,6 +12590,23 @@ p {
   color: #A5A39C;
 }
 
+.table-body a {
+  max-width: 150px;
+}
+
+@media (min-width: 768px) {
+  .table-body a {
+    max-width: 100%;
+  }
+}
+
+.ellipsis {
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sign-block {
   border: 2px dashed #A5A39C;
   border-radius: 35px;
