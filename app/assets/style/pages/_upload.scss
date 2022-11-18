@@ -46,7 +46,7 @@
 
 }
 
-.input {
+.search-input {
     &:focus {
         outline-style: none;
     }
@@ -57,7 +57,7 @@
 }
 
 .no-file,
-.file {
+.has-file {
     // height: 50vh;
     display: flex;
     justify-content: center;

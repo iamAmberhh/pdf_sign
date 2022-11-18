@@ -1,12 +1,8 @@
-const footer = document.querySelector(".footer");
-if (window.location.pathname == "/pdf_sign/" || window.location.pathname == '/pdf_sign/index.html') {
-  footer.classList.add("d-none");
-}
 
 // 下bar 時間軸
 const timeline = document.querySelectorAll(".timeline li");
 let pages = 0;
-if (window.location.pathname == '/pdf_sign/upload.html') {
+if (window.location.pathname == "/pdf_sign/upload.html") {
   timelineCheck();
 }
 
@@ -71,8 +67,6 @@ function drop(e) {
   let dt = e.dataTransfer;
   let files = dt.files;
   let fileObj = files[0];
-  // console.log(files)
-  // console.log(files[0])
   handleFiles(files, fileObj);
 }
 
@@ -91,32 +85,37 @@ function handleFiles(files, fileObj) {
     fileSizeOver.show();
     return;
   }
-  
+
   if (files.length > 0) {
     let fileReader = new FileReader();
     fileReader.readAsArrayBuffer(fileObj);
 
-    fileReader.addEventListener("load", function () {
-      const result = fileReader.result;
-      // console.log(result)
-      const typedarray = new Uint8Array(fileReader.result);
-      // console.log(typedarray)
+    fileReader.addEventListener("load", async () => {
+      canvas.requestRenderAll();
+      const pdfData = await printPDF(files[0]);
+      const pdfImage = await pdfToImage(pdfData);
+
+      canvas.setWidth(pdfImage.width / window.devicePixelRatio);
+      canvas.setHeight(pdfImage.height / window.devicePixelRatio);
+      canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
     });
-    
-    let obj = {};
-    obj.name = files[0].name;
-    obj.year = files[0].lastModifiedDate.getFullYear();
-    obj.month = files[0].lastModifiedDate.getMonth() + 1;
-    obj.date = files[0].lastModifiedDate.getDate();
-    data.push(obj);
+
+    // let obj = {};
+    // obj.name = files[0].name;
+    // obj.year = files[0].lastModifiedDate.getFullYear();
+    // obj.month = files[0].lastModifiedDate.getMonth() + 1;
+    // obj.date = files[0].lastModifiedDate.getDate();
+    // data.push(obj);
 
     noUpload.classList.add("d-none");
     fileTable.classList.remove("d-none");
 
     // fileReader.readAsText(files[0]); // 讀取上傳的檔案
-
-    renderUpload();
+    // renderUpload();
     uploadSuccess.show();
+    nextStepBtn[0].classList.remove("disabled", "btn-disabled");
+    nextStepBtn[0].classList.add("btn-secondary");
+    fileName.textContent = files[0].name;
   }
 }
 
@@ -127,6 +126,7 @@ let uploadSuccess = new bootstrap.Modal(
 const fileUploader = document.querySelector(".select");
 
 if (fileUploader) {
+    
   fileUploader.addEventListener("change", (e) => {
     // 副檔名檢查
     if (fileUploader.files[0].name.split(".")[1] != "pdf") {
@@ -144,7 +144,6 @@ if (fileUploader) {
       return;
     }
 
-
     if (fileUploader.files.length > 0) {
       let reader = new FileReader();
       reader.addEventListener("load", function () {
@@ -152,38 +151,42 @@ if (fileUploader) {
         const typedarray = new Uint8Array(reader.result);
       });
 
-      let obj = {};
-      obj.name = fileUploader.files[0].name;
-      obj.year = fileUploader.files[0].lastModifiedDate.getFullYear();
-      obj.month = fileUploader.files[0].lastModifiedDate.getMonth() + 1;
-      obj.date = fileUploader.files[0].lastModifiedDate.getDate();
-      data.push(obj);
+      //   let obj = {};
+      //   obj.name = fileUploader.files[0].name;
+      //   obj.year = fileUploader.files[0].lastModifiedDate.getFullYear();
+      //   obj.month = fileUploader.files[0].lastModifiedDate.getMonth() + 1;
+      //   obj.date = fileUploader.files[0].lastModifiedDate.getDate();
+      //   data.push(obj);
 
       reader.readAsText(fileUploader.files[0]);
     }
     noUpload.classList.add("d-none");
     fileTable.classList.remove("d-none");
-    renderUpload();
+    // renderUpload();
     uploadSuccess.show();
+    nextStepBtn[0].classList.remove("disabled", "btn-disabled");
+    nextStepBtn[0].classList.add("btn-secondary");
+    fileName.textContent = fileUploader.files[0].name;
   });
 }
 
 const fileTable = document.querySelector(".has-file");
 const fileTableBody = document.querySelector(".table-body");
-function renderUpload() {
-  let str = "";
+// function renderUpload() {
+//   let str = "";
 
-  data.forEach((i) => {
-    str += `<tr data-upload>
-    <th scope="row"><a href="#" class="ellipsis">${i.name}</a></th>
-    <td><a href="#">${i.year}/${i.month}/${i.date}</a></td>
-    <td class="d-none d-md-block"><a href="#">--</a></td>
-</tr>`;
-  });
-  fileTableBody.innerHTML = str;
-}
+//   data.forEach((i) => {
+//     str += `<tr data-upload>
+//     <th scope="row"><a href="#" class="ellipsis">${i.name}</a></th>
+//     <td><a href="#">${i.year}/${i.month}/${i.date}</a></td>
+//     <td class="d-none d-md-block"><a href="#">--</a></td>
+// </tr>`;
+//   });
+//   fileTableBody.innerHTML = str;
+// }
 
-const nextStepBtn = document.querySelector("[data-next]");
+const nextStepBtn = document.querySelectorAll("[data-next]");
+const cancelBtn = document.querySelector("[data-cancel]");
 const fileName = document.querySelector(".file-name");
 
 const uploadBlock = document.querySelector("#upload");
@@ -196,24 +199,36 @@ if (fileTableBody) {
       i.classList.remove("bg-light");
     });
     e.target.closest("tr").classList.add("bg-light");
-    console.log(e.target.closest('tr').firstChild.nextSibling.firstChild.textContent
+    console.log(
+      e.target.closest("tr").firstChild.nextSibling.firstChild.textContent
     );
-    let file = e.target.closest('tr').firstChild.nextSibling.firstChild.textContent;
-    nextStepBtn.classList.remove("disabled", "btn-disabled");
-    nextStepBtn.classList.add("btn-secondary");
-  fileName.textContent = file;
+    let file =
+      e.target.closest("tr").firstChild.nextSibling.firstChild.textContent;
+    nextStepBtn[0].classList.remove("disabled", "btn-disabled");
+    nextStepBtn[0].classList.add("btn-secondary");
+    fileName.textContent = file;
   });
-  
 }
+const asideBar = document.querySelector('.aside-bar');
+// 步驟推進
 if (nextStepBtn) {
-  nextStepBtn.addEventListener("click", function () {
+  nextStepBtn[0].addEventListener("click", function (e) {
     uploadBlock.classList.add("d-none");
     signBlock.classList.remove("d-none");
-    nextStepBtn.textContent = `創建文件`;
-    nextStepBtn.classList.add("disabled", "btn-disabled");
-    nextStepBtn.classList.remove("btn-secondary");
-    pages++
-    timelineCheck()
+    nextStepBtn[0].classList.add("d-none");
+    nextStepBtn[1].classList.remove("d-none");
+    pages++;
+    timelineCheck();
+  });
+  nextStepBtn[1].addEventListener("click", function (e) {
+    nextStepBtn[1].classList.add("d-none");
+    nextStepBtn[2].classList.remove("d-none");
+    asideBar.classList.add("d-none");
+    nextStepBtn[2].classList.remove("disabled", "btn-disabled");
+    nextStepBtn[2].classList.add("btn-secondary");
+    cancelBtn.textContent = "回首頁";
+    pages++;
+    timelineCheck();
   });
 }
 
@@ -224,7 +239,6 @@ if (noUpload) {
     fileTable.classList.add("d-none");
   }
 }
-
 
 // 簽名
 const signCanvas = document.querySelector("#sign-canvas");
@@ -336,14 +350,12 @@ if (signCanvas) {
   saveBtn.addEventListener("click", save);
 }
 
-
-
-
 // PDF渲染成畫布
-
 const Base64Prefix = "data:application/pdf;base64,";
+var pdfjsLib = window["pdfjs-dist/build/pdf"];
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
+  "//mozilla.github.io/pdf.js/build/pdf.worker.js";
 
 // 使用原生 FileReader 轉檔
 function readBlob(blob) {
@@ -368,7 +380,7 @@ async function printPDF(pdfData) {
 
   // 設定尺寸及產生 canvas
   const viewport = pdfPage.getViewport({
-  scale: window.devicePixelRatio
+    scale: window.devicePixelRatio,
   });
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -378,7 +390,7 @@ async function printPDF(pdfData) {
   canvas.width = viewport.width;
   const renderContext = {
     canvasContext: context,
-    viewport
+    viewport,
   };
   const renderTask = pdfPage.render(renderContext);
   return renderTask.promise.then(() => canvas);
@@ -394,8 +406,7 @@ async function pdfToImage(pdfData) {
 
 // 此處 canvas 套用 fabric.js
 const canvas = new fabric.Canvas("canvas");
-
-document.querySelector(".testBtn").addEventListener("change", async (e) => {
+fileUploader.addEventListener("change", async (e) => {
   canvas.requestRenderAll();
   const pdfData = await printPDF(e.target.files[0]);
   const pdfImage = await pdfToImage(pdfData);
@@ -404,3 +415,34 @@ document.querySelector(".testBtn").addEventListener("change", async (e) => {
   canvas.setHeight(pdfImage.height / window.devicePixelRatio);
   canvas.setBackgroundImage(pdfImage, canvas.renderAll.bind(canvas));
 });
+
+const sign = document.querySelector(".sign-img");
+if (localStorage.getItem("img")) {
+  sign.src = localStorage.getItem("img");
+}
+
+sign.addEventListener("click", function (e) {
+  if (!sign.src) {
+    return;
+  }
+  fabric.Image.fromURL(sign.src, function (img) {
+    img.top = 0;
+    img.scaleX = 0.5;
+    img.scaleY = 0.5;
+    canvas.add(img);
+  });
+  nextStepBtn[1].classList.remove("disabled", "btn-disabled");
+  nextStepBtn[1].classList.add("btn-secondary");
+});
+
+// 下載PDF
+let pdf = new jsPDF();
+const download = document.querySelector('.download');
+nextStepBtn[2].addEventListener('click',function(e){
+  const image = canvas.toDataURL("image/png")
+
+  const width = pdf.internal.pageSize.width;
+  const height = pdf.internal.pageSize.height;
+  pdf.addImage(image,"png",0,0,width,height);
+  pdf.save("download.pdf")
+})
