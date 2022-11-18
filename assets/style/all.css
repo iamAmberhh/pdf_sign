@@ -12544,32 +12544,32 @@ p {
   color: #A5A39C;
 }
 
-.input:focus {
+.search-input:focus {
   outline-style: none;
 }
 
-.input::-webkit-input-placeholder {
+.search-input::-webkit-input-placeholder {
   color: #A5A39C;
 }
 
-.input::-moz-placeholder {
+.search-input::-moz-placeholder {
   color: #A5A39C;
 }
 
-.input:-ms-input-placeholder {
+.search-input:-ms-input-placeholder {
   color: #A5A39C;
 }
 
-.input::-ms-input-placeholder {
+.search-input::-ms-input-placeholder {
   color: #A5A39C;
 }
 
-.input::placeholder {
+.search-input::placeholder {
   color: #A5A39C;
 }
 
 .no-file,
-.file {
+.has-file {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
