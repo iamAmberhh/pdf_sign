@@ -12671,4 +12671,8 @@ p {
   background: #FFFAF4;
 }
 
+.pdf-render {
+  overflow-x: scroll;
+}
+
 /*# sourceMappingURL=all.css.map */

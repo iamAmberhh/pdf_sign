@@ -95,7 +95,7 @@
     <div class="order-2 order-lg-1 col-lg-3 aside-bar bg-white ps-lg-2 p-4">
       <p class="mb-3 fw-bold">文件名稱</p>
       <p class="mb-5 file-name ellipsis"></p>
-      <p class="mb-3 fw-bold">我的簽名</p>
+      <p class="mb-3 fw-bold">我的簽名 (直接點擊使用)</p>
       <div class="mb-3">
         <a href="#" class="btn-outline d-flex justify-content-center align-items-center d-none">
           <img class="sign-img" width="250" height="100">
@@ -157,7 +157,7 @@
 
 <!-- 簽名Modal -->
 <div class="modal fade" id="mysign" tabindex="-1" aria-labelledby="mysignLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header m-4">
         <p class="modal-title fs-2" id="mysignLabel">在框格內簽下大名!</p>
@@ -216,6 +216,21 @@
     <div class="modal-content">
       <div class="modal-body text-center p-6">
         <p class="fs-2">您的檔案類型不是PDF檔!!</p>
+      </div>
+      <div class="modal-footer d-flex justify-content-end">
+        <a href="#" class="btn btn-secondary rounded-pill px-5 py-3" data-bs-dismiss="modal">我知道了</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 確認下載 -->
+<div class="modal fade" id="createSuccess" tabindex="-1" aria-labelledby="createSuccessLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-6">
+        <p class="fs-2">創建完成!</p>
+        <p class="fs-2">現在可以下載簽屬好的文件囉</p>
       </div>
       <div class="modal-footer d-flex justify-content-end">
         <a href="#" class="btn btn-secondary rounded-pill px-5 py-3" data-bs-dismiss="modal">我知道了</a>
