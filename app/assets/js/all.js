@@ -221,6 +221,10 @@ if (nextStepBtn) {
     timelineCheck();
   });
   nextStepBtn[1].addEventListener("click", function (e) {
+    let createSuccess = new bootstrap.Modal(
+      document.querySelector("#createSuccess")
+    );
+    createSuccess.show();
     nextStepBtn[1].classList.add("d-none");
     nextStepBtn[2].classList.remove("d-none");
     asideBar.classList.add("d-none");
