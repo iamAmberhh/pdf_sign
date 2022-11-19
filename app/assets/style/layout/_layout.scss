@@ -68,3 +68,13 @@
         color:$white;
     }
  }
+
+ 
+.footer {
+    width: 100%;
+    height: 202px;
+
+    @include media-breakpoint-up(lg) {
+        height: 95px;
+    }
+}
