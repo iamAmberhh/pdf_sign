@@ -240,6 +240,7 @@ if (noUpload) {
 
 // 簽名
 var signCanvas = document.querySelector("#sign-canvas");
+var signColor = document.querySelectorAll('.sign-color');
 if (signCanvas) {
   // 取得滑鼠or手指在畫布上的位置
   var getPointPosition = function getPointPosition(e) {
@@ -308,6 +309,17 @@ if (signCanvas) {
   // 設定線條相關數值
   signCtx.lineWidth = 4;
   signCtx.lineCap = "round";
+  signColor.forEach(function (i) {
+    i.addEventListener('click', function (e) {
+      if (e.target.classList.contains('sign-color-red')) {
+        signCtx.strokeStyle = "red";
+      } else if (e.target.classList.contains('sign-color-blue')) {
+        signCtx.strokeStyle = "blue";
+      } else if (e.target.classList.contains('sign-color-black')) {
+        signCtx.strokeStyle = "black";
+      }
+    });
+  });
   var isPainting = false;
   var step = -1;
   var historyStep = [];

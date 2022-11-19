@@ -12650,7 +12650,7 @@ p {
 
 @media (min-width: 992px) {
   .aside-bar {
-    height: 80vh;
+    height: 160vh;
   }
   .aside-bar::before {
     width: 30px;
@@ -12673,6 +12673,27 @@ p {
 
 .pdf-render {
   overflow-x: scroll;
+}
+
+::-webkit-scrollbar-button .sign-color {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 3px solid white;
+  -webkit-box-shadow: 0px 1.96129px 1.96129px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 1.96129px 1.96129px rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar-button .sign-color-black {
+  background-color: black;
+}
+
+::-webkit-scrollbar-button .sign-color-blue {
+  background-color: blue;
+}
+
+::-webkit-scrollbar-button .sign-color-red {
+  background-color: red;
 }
 
 /*# sourceMappingURL=all.css.map */

@@ -118,9 +118,10 @@
         </li>
       </ul>
     </div>
-    <div class="order-1 order-lg-2 col-lg-9 py-6 ">
-      <div class="pdf-render bg-white w-100">
+    <div class="order-1 order-lg-2 col-lg-9 py-4 py-lg-6 px-5 px-lg-6">
+      <div class="pdf-render bg-drak w-100">
         <canvas id="canvas"> </canvas>
+        <p class="text-nowrap ps-6 mb-3">若文件寬度超過，可以左右滑動檢視文件</p>
       </div>
     </div>
   </div>
@@ -148,9 +149,9 @@
     </ul>
     <ul class="d-flex justify-content-center pt-4 pt-lg-0 border-2 border-top border-lg-0">
       <li><a href="index.html" data-cancel class="btn btn-white link-secondary rounded-pill btn-lg px-4 px-sm-6 me-3">取消</a></li>
-      <li><a href="#" data-next class="disabled btn btn-disabled rounded-pill btn-lg px-2 px-sm-6">開啟文件</a></li>
-      <li><a href="#" data-next class="d-none disabled btn btn-disabled rounded-pill btn-lg px-2 px-sm-6">創建文件</a></li>
-      <li><a href="#" data-next class="d-none disabled btn btn-disabled rounded-pill btn-lg px-2 px-sm-6">下載文件</a></li>
+      <li><a href="#" data-next class="disabled btn btn-disabled rounded-pill btn-lg px-4 px-sm-6">開啟文件</a></li>
+      <li><a href="#" data-next class="d-none disabled btn btn-disabled rounded-pill btn-lg px-4 px-sm-6">創建文件</a></li>
+      <li><a href="#" data-next class="d-none disabled btn btn-disabled rounded-pill btn-lg px-4 px-sm-6">下載文件</a></li>
     </ul>
   </div>
 </footer>
@@ -168,8 +169,15 @@
           your browser can not support canvas
         </canvas>
       </div>
-      <div class="modal-footer d-flex justify-content-between align-items-center m-4">
-        <a href="#" class="clearBtn link-secondary fs-2">清除</a>
+      <div class="modal-footer d-flex flex-column justify-content-center align-items-center flex-lg-row justify-content-md-between m-4">
+        <div class="d-flex align-items-center mb-3 mb-lg-0">
+          <a href="#" class="clearBtn link-secondary fs-2 me-5">清除</a>
+          <ul class="d-flex mb-0">
+            <li><a href="#" class="d-block me-3 sign-color sign-color-black"></a></li>
+            <li><a href="#" class="d-block me-3 sign-color sign-color-blue"></a></li>
+            <li><a href="#" class="d-block sign-color sign-color-red"></a></li>
+          </ul>
+        </div>
         <ul class="d-flex">
           <li><a href="#" class="btn btn-secondary rounded-pill px-3 px-md-5 py-3 backBtn me-3">前一步</a></li>
           <li><a href="#" class="btn btn-secondary rounded-pill px-3 px-md-5 py-3 saveBtn"
