@@ -246,6 +246,7 @@ if (noUpload) {
 
 // 簽名
 const signCanvas = document.querySelector("#sign-canvas");
+const signColor = document.querySelectorAll('.sign-color');
 if (signCanvas) {
   const signCtx = signCanvas.getContext("2d");
   const signImg = document.querySelector(".sign-img");
@@ -256,6 +257,17 @@ if (signCanvas) {
   // 設定線條相關數值
   signCtx.lineWidth = 4;
   signCtx.lineCap = "round";
+  signColor.forEach(i=>{
+    i.addEventListener('click',function(e){
+      if(e.target.classList.contains('sign-color-red')){
+        signCtx.strokeStyle = "red";
+      }else if(e.target.classList.contains('sign-color-blue')){
+        signCtx.strokeStyle = "blue";
+      }else if(e.target.classList.contains('sign-color-black')){
+        signCtx.strokeStyle = "black";
+      }
+    })
+  })
 
   let isPainting = false;
 
