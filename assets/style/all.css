@@ -12455,6 +12455,17 @@ p {
   color: #fff;
 }
 
+.footer {
+  width: 100%;
+  height: 202px;
+}
+
+@media (min-width: 992px) {
+  .footer {
+    height: 95px;
+  }
+}
+
 .banner {
   background: #F9F8F6;
   padding-top: 56px;
@@ -12613,17 +12624,6 @@ p {
   color: #A5A39C;
 }
 
-.footer {
-  width: 100%;
-  height: 202px;
-}
-
-@media (min-width: 992px) {
-  .footer {
-    height: 95px;
-  }
-}
-
 .aside-bar {
   position: relative;
 }
@@ -12675,24 +12675,25 @@ p {
   overflow-x: scroll;
 }
 
-::-webkit-scrollbar-button .sign-color {
+.sign-color {
   width: 19px;
   height: 19px;
   border-radius: 50%;
+  background-color: transparent;
   border: 3px solid white;
   -webkit-box-shadow: 0px 1.96129px 1.96129px rgba(0, 0, 0, 0.25);
           box-shadow: 0px 1.96129px 1.96129px rgba(0, 0, 0, 0.25);
 }
 
-::-webkit-scrollbar-button .sign-color-black {
+.sign-color-black {
   background-color: black;
 }
 
-::-webkit-scrollbar-button .sign-color-blue {
+.sign-color-blue {
   background-color: blue;
 }
 
-::-webkit-scrollbar-button .sign-color-red {
+.sign-color-red {
   background-color: red;
 }
 
